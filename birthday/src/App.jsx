@@ -6,8 +6,9 @@ import pic4 from '/pic4.jpeg';
 import pic5 from '/pic5.jpeg';
 import pic6 from '/pic6.jpeg';
 import pic7 from '/pic7.jpeg';
-
+import { useNavigate } from 'react-router-dom';
 export default function ImageSlider() {
+  const navigate = useNavigate();
   const images = [pic1, pic2, pic3, pic4,pic5,pic6,pic7];
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -80,7 +81,21 @@ export default function ImageSlider() {
           →
         </button>
       </div>
-      <button></button>
+      <button
+        onClick={() => navigate('/next')}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          fontSize: '2.5rem',
+          background: 'transparent',
+          color: 'wheat',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        ➡️
+      </button>
     </div>
   );
 }

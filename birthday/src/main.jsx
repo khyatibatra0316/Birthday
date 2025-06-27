@@ -5,13 +5,20 @@ import './index.css';
 
 import App from './App.jsx'; // your ImageSlider
 import NextPage from './NextPage.jsx'; // ✅ create this component
+import Page3 from './Page3.jsx';
+import Page4 from './Page4.jsx';
+import Page5 from './Page5.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/next" element={<NextPage />} />
+        <Route path="/page2" element={<NextPage />} />
+        <Route path="/page3" element={<Page3 />} />
+        <Route path="/page4" element={<Page4 />} />
+        <Route path="/page5" element={<Page5 />} />
+        
       </Routes>
     </BrowserRouter>
   </StrictMode>

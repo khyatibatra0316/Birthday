@@ -1,51 +1,44 @@
-import { useNavigate } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 export default function MemoryWall() {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const goToNextPage = () => {
     navigate("/page3");
   };
+
   const photos = [
-    {
-      src: "/Pic1.png",
-     
-    },
-    {
-      src: "/Pic2.png",
-      
-    },
-    {
-      src: "/Pic3.png",
-      
-    },
-    {
-      src: "/Pic4.png",
-  
-    },
-    {
-      src: "/Pic5.png",
-     
-    },
-    {
-      src: "/Pic6.png",
-      
-    }
+    { src: "/Pic1.png" },
+    { src: "/Pic2.png" },
+    { src: "/Pic3.png" },
+    { src: "/Pic4.png" },
+    { src: "/Pic5.png" },
+    { src: "/Pic6.png" }
   ];
 
   const styles = {
     page: {
       display: 'flex',
-      flexDirection: 'row',
-      
+      flexDirection: isMobile ? 'column' : 'row',
       minHeight: '100vh',
-      fontFamily: `'Dancing Script', cursive`
+      fontFamily: `'Dancing Script', cursive`,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     container: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gridGap: '20vh',
-      padding: '60px',
+      gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+      gridGap: isMobile ? '5vh' : '20vh',
+      padding: isMobile ? '20px' : '60px',
       flex: 1,
       justifyItems: 'center'
     },
@@ -54,7 +47,7 @@ export default function MemoryWall() {
       borderRadius: '14px',
       boxShadow: '0 10px 15px rgba(0, 0, 0, 0.1)',
       padding: '10px',
-      width: '230px',
+      width: isMobile ? '80%' : '230px',
       textAlign: 'center',
       transition: 'transform 0.3s ease',
       border: '1px solid #eee'
@@ -63,79 +56,45 @@ export default function MemoryWall() {
       width: '100%',
       borderRadius: '10px'
     },
-    caption: {
-      marginTop: '10px',
-      fontSize: '1rem',
-      color: '#444'
-    },
-    message: {
-      writingMode: 'vertical-rl',
-      transform: 'rotate(180deg)',
-      color: '#fff',
-      fontSize: '28px',
-      fontWeight: 'bold',
-      padding: '30px 20px',
-      textAlign: 'center',
-      whiteSpace: 'nowrap',
-      fontFamily: `'Dancing Script', cursive`,
-      textShadow: '2px 2px 8px rgba(0,0,0,0.4)'
-    },
-    emoji: {
-      fontSize: '40px',
-      marginTop: '20px',
-      writingMode: 'vertical-rl',
-      transform: 'rotate(180deg)',
-      textAlign: 'center'
-    },
-   
   };
-  
 
   return (
-    <>
-      
-      <div style={styles.page}>
-        <div style={styles.container}>
-          {photos.map((photo, index) => (
-            <div key={index} style={styles.card}>
-              <img src={photo.src} alt="memory" style={styles.image} />
-              <p style={styles.caption}>{photo.caption}</p>
-            </div>
-          ))}
-        </div>
-        <div>
-          <div style={{isplay: 'flex', 
-  flexDirection: 'column', 
-  justifyContent: 'center', 
-  alignItems: 'center', 
-  fontSize: '9vh',
-  fontFamily: `'Dancing Script', cursive`,
-  color: '#fff',
-  textShadow: '2px 2px 8px rgba(0,0,0,0.4)',
-  gap: '90px'}}>
-            My <br/>
-            Beautifulll<br/> 
-            Human <br/>
-            Being 💫<br/>
+    <div style={styles.page}>
+      <div style={styles.container}>
+        {photos.map((photo, index) => (
+          <div key={index} style={styles.card}>
+            <img src={photo.src} alt="memory" style={styles.image} />
           </div>
-          <div style={{ fontSize: '3vh' }}>🌸✨💛🌈🥹</div>
-
-          <button 
-            
-            onClick={goToNextPage}
-        style={{
-          position: "absolute",
-          bottom: "30px",
-          fontSize: "2rem",
-          cursor: "pointer",
-          animation: "bounce 1.5s infinite",
-        }}
-            
-          >
-             ➡️
-          </button>
-        </div>
+        ))}
       </div>
-    </>
+      <div style={{
+        fontSize: isMobile ? '5vh' : '9vh',
+        fontFamily: `'Dancing Script', cursive`,
+        color: '#fff',
+        textShadow: '2px 2px 8px rgba(0,0,0,0.4)',
+        padding: '20px',
+        textAlign: 'center'
+      }}>
+        My <br />
+        Beautiful <br />
+        Human <br />
+        Being 💫 <br />
+        <div style={{ fontSize: isMobile ? '2vh' : '3vh' }}>🌸✨💛🌈🥹</div>
+        <button 
+          onClick={goToNextPage}
+          style={{
+            fontSize: isMobile ? '1.5rem' : '2rem',
+            cursor: 'pointer',
+            animation: 'bounce 1.5s infinite',
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            marginTop: '20px'
+          }}
+        >
+          ➡️
+        </button>
+      </div>
+    </div>
   );
 }

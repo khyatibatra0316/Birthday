@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // needed for navigation
+import { useNavigate } from "react-router-dom";
 
-function TypewriterText({ text, speed = 100 }) {
+function TypewriterText({ text, speed = 100, fontSize = '1.2rem' }) {
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -15,11 +15,18 @@ function TypewriterText({ text, speed = 100 }) {
     return () => clearInterval(interval);
   }, [text, speed]);
 
-  return <h3 style={{ color: "#fff", marginTop: "20px", fontWeight: 400 }}>{displayedText}</h3>;
+  return <h3 style={{ color: "#fff", marginTop: "20px", fontWeight: 400, fontSize }}>{displayedText}</h3>;
 }
 
 export default function App() {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const goToNextPage = () => {
     navigate("/page2");
@@ -39,20 +46,24 @@ export default function App() {
         alignItems: 'center',
         color: 'white',
         textAlign: 'center',
-        padding: '20px',
+        padding: isMobile ? '10px' : '20px',
         position: 'relative',
       }}
     >
-      <h1 style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>To My Best Friend</h1>
-      <TypewriterText text="Every petal, like every memory — beautiful, gentle, and blooming with you 🌻" speed={70} />
+      <h1 style={{ fontSize: isMobile ? '2rem' : '3rem', marginBottom: '0.5rem' }}>To My Best Friend</h1>
+      <TypewriterText 
+        text="Every petal, like every memory — beautiful, gentle, and blooming with you 🌻" 
+        speed={70}
+        fontSize={isMobile ? '1rem' : '1.2rem'}
+      />
 
-      {/* Down arrow */}
+      
       <div
         onClick={goToNextPage}
         style={{
           position: "absolute",
           bottom: "30px",
-          fontSize: "2rem",
+          fontSize: isMobile ? "1.5rem" : "2rem",
           cursor: "pointer",
           animation: "bounce 1.5s infinite",
         }}

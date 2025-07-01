@@ -1,11 +1,18 @@
-import { use, useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 export default function Page3() {
-  const navigate=useNavigate();
-  const goToNextPage=()=>{
-    navigate('/page4');
-  }  
+  const navigate = useNavigate();
+  const goToNextPage = () => navigate('/page4');
+
   const [flipped, setFlipped] = useState(Array(10).fill(false));
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const messages = [
     "You were always there even when I didn’t ask for help.💛",
@@ -18,38 +25,25 @@ export default function Page3() {
     "You are not just a chapter; you're the whole story. ✨",
     "I'm nothing without you ❤️ - Shivam.",
     "You don't know how much you mean to me. 🤗",
-    "You always heard about my lovers and never judged me for choosing them.",
-    "I know sometimes I fight with you but that doesn’t mean I don’t love you.",
-   " U hv always clarified my problems like a strainer, thanks for solving every fight that has been ouccred - Radhika",
-   "I wish I could tell you how much I love you but words are not enough to express my feelings.",
-    
   ];
 
-  const toggleFlip = (index) => {
-    const updated = [...flipped];
-    updated[index] = !updated[index];
-    setFlipped(updated);
-  };
-
   const containerStyle = {
-   
     minHeight: '100vh',
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: '30px',
-    
+    gap: isMobile ? '15px' : '30px',
+    padding: '20px',
     fontFamily: `'Dancing Script', cursive`,
   };
 
-  const memoryBoxStyle = (index) => ({
-    width: '160px',
-    height: '160px',
+  const memoryBoxStyle = {
+    width: isMobile ? '120px' : '160px',
+    height: isMobile ? '120px' : '160px',
     perspective: '1000px',
-    transform: `rotate(${(index % 2 === 0 ? -1 : 1) * (10 + index * 2)}deg)`,
     cursor: 'pointer',
-  });
+  };
 
   const boxInnerStyle = (isFlipped) => ({
     width: '100%',
@@ -83,46 +77,48 @@ export default function Page3() {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '15px',
+    padding: '10px',
     textAlign: 'center',
-    fontSize: '1.1rem',
+    fontSize: isMobile ? '0.9rem' : '1.1rem',
+  };
+
+  const toggleFlip = (index) => {
+    const updated = [...flipped];
+    updated[index] = !updated[index];
+    setFlipped(updated);
   };
 
   return (
     <>
-    <h1 style={{justifyContent:'center',alignContent:'center'}}>
-        Some beautiful messages for you 🩷
-    </h1>
-    <div style={containerStyle}>
-      {messages.map((msg, index) => (
-        <div
-          key={index}
-          style={memoryBoxStyle(index)}
-          onClick={() => toggleFlip(index)}
-        >
-          <div style={boxInnerStyle(flipped[index])}>
-            <div style={frontStyle}></div>
-            <div style={backStyle}>{msg}</div>
+      <h1 style={{ textAlign: 'center', fontSize: isMobile ? '1.5rem' : '2rem' }}>Some beautiful messages for you 🩷</h1>
+      <div style={containerStyle}>
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            style={memoryBoxStyle}
+            onClick={() => toggleFlip(index)}
+          >
+            <div style={boxInnerStyle(flipped[index])}>
+              <div style={frontStyle}></div>
+              <div style={backStyle}>{msg}</div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
       <div
         onClick={goToNextPage}
         style={{
-            position: "fixed",   
-            bottom: "30px",
-            right: "30px",         
-            fontSize: "2rem",
-            cursor: "pointer",
-            animation: "bounce 1.5s infinite",
-            zIndex: 1000    
-         }}
-         >
-            ➡️
+          position: "fixed",
+          bottom: "30px",
+          right: "30px",
+          fontSize: isMobile ? "1.5rem" : "2rem",
+          cursor: "pointer",
+          animation: "bounce 1.5s infinite",
+          zIndex: 1000
+        }}
+      >
+        ➡️
       </div>
-    </div>
-   
-
     </>
   );
 }
